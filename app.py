@@ -7,7 +7,19 @@ import pandas as pd
 
 from backend import (
     MODEL_PATH,
+    download_dataset,
+    evaluate_model,
+    load_data,
     load_saved_model,
+    plot_age_bmi_scatter,
+    plot_class_distribution,
+    plot_confusion_matrix,
+    plot_correlation_heatmap,
+    plot_feature_importance,
+    plot_roc_curve,
+    plot_single_tree,
+    preprocess_data,
+    split_data,
     train_and_save_model,
 )
 
@@ -125,6 +137,16 @@ except Exception as exc:
     )
     st.exception(exc)
     st.stop()
+
+
+@st.cache_resource
+def get_graph_data():
+    csv_path = download_dataset()
+    df = load_data(csv_path)
+    df_clean = preprocess_data(df)
+    X_train, X_test, y_train, y_test = split_data(df_clean, 20, 42)
+    results = evaluate_model(model, X_train, X_test, y_train, y_test)
+    return df, df_clean, results
 
 # ============================================================
 # INPUT SECTION
@@ -283,6 +305,61 @@ if st.button("🔍 Predict Diabetes Risk"):
             <h2>{age}</h2>
         </div>
         """, unsafe_allow_html=True)
+
+# ============================================================
+# BACKEND GRAPHS
+# ============================================================
+
+st.markdown("## 📊 Model Graphs")
+
+try:
+    df, df_clean, results = get_graph_data()
+
+    graph_tabs = st.tabs([
+        "Class Distribution",
+        "Correlation",
+        "Confusion Matrix",
+        "Feature Importance",
+        "ROC Curve",
+        "Age vs BMI",
+        "Decision Tree",
+    ])
+
+    with graph_tabs[0]:
+        st.pyplot(plot_class_distribution(df), use_container_width=True)
+
+    with graph_tabs[1]:
+        st.pyplot(plot_correlation_heatmap(df_clean), use_container_width=True)
+
+    with graph_tabs[2]:
+        st.pyplot(
+            plot_confusion_matrix(results["conf_matrix"]),
+            use_container_width=True,
+        )
+
+    with graph_tabs[3]:
+        feature_fig, _, _ = plot_feature_importance(model)
+        st.pyplot(feature_fig, use_container_width=True)
+
+    with graph_tabs[4]:
+        st.pyplot(
+            plot_roc_curve(
+                results["roc_fpr"],
+                results["roc_tpr"],
+                results["auc_score"],
+            ),
+            use_container_width=True,
+        )
+
+    with graph_tabs[5]:
+        st.pyplot(plot_age_bmi_scatter(df_clean), use_container_width=True)
+
+    with graph_tabs[6]:
+        st.pyplot(plot_single_tree(model), use_container_width=True)
+
+except Exception as exc:
+    st.warning("Graphs could not be loaded right now.")
+    st.caption(str(exc))
 
 # ============================================================
 # FOOTER
