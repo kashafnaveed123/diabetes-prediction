@@ -129,6 +129,7 @@ def ensure_kaggle_credentials() -> None:
 
     if not username or not api_key:
         raise EnvironmentError(
+            
             "Missing Kaggle credentials. Add KAGGLE_USERNAME and KAGGLE_KEY to .env."
         )
 

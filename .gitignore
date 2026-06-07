@@ -1,6 +1,6 @@
 # Kaggle API key (VERY IMPORTANT)
 kaggle.json
-venv
+venv/
 
 # Python cache
 __pycache__/

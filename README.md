@@ -9,7 +9,7 @@ diabetes_project/
 │
 ├── backend.py          ← ML brain: download data, train model, evaluate, plot
 ├── app.py              ← Streamlit UI  (coming next!)
-├── setup_kaggle.py     ← Run ONCE to save your Kaggle API key in .env
+├──  .env
 ├── requirements.txt    ← All Python libraries needed
 ├── .env.example        ← Example env file for Kaggle credentials
 └── README.md           ← This guide
@@ -46,9 +46,8 @@ Open the terminal: press **Ctrl + `** (backtick key, top-left of keyboard)
 ### ✅ STEP 3 — Install Libraries
 
 ## create the virtual environment
-python3.12 -m venv venv
-source venv/bin/activate
-
+python -m venv venv
+venv\Scripts\activate
 
 
 In the terminal, type:
