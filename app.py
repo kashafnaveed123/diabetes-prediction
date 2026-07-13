@@ -17,7 +17,7 @@ from backend import (
     plot_correlation_heatmap,
     plot_feature_importance,
     plot_roc_curve,
-    plot_single_tree,
+    # plot_single_tree,
     preprocess_data,
     split_data,
     train_and_save_model,
@@ -354,8 +354,8 @@ try:
     with graph_tabs[5]:
         st.pyplot(plot_age_bmi_scatter(df_clean), use_container_width=True)
 
-    with graph_tabs[6]:
-        st.pyplot(plot_single_tree(model), use_container_width=True)
+    # with graph_tabs[6]:
+    #     st.pyplot(plot_single_tree(model), use_container_width=True)
 
 except Exception as exc:
     st.warning("Graphs could not be loaded right now.")
